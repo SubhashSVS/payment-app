@@ -5,10 +5,30 @@ const {MongoURL} = require('./config');
 mongoose.connect(MongoURL);
 
 const userSchema = new mongoose.Schema({
-    userName : String,
-    password_hash : String,
-    firstName : String,
-    lastName : String
+    userName : {
+        type : String,
+        required : true,
+        trim :true,
+        minLength : 3,
+        maxLength : 30  
+    },
+    password_hash : {
+        type : String,
+        required : true,
+        minLength : 8
+    },
+    firstName : {
+        type : String,
+        required : true,
+        trim : true,
+        maxLength : 40
+    },
+    lastName : {
+        type : String,
+        required : true,
+        trim : true,
+        maxLength : 30
+    }
 });
 
 userSchema.methods.createHash = async function(password){
@@ -21,6 +41,22 @@ userSchema.methods.validatePassword = async function(password){
     return await bcrypt.compare(password,this.password_hash);
 }
 
-const User = mongoose.model('User',userSchema);
+const accountSchema = mongoose.Schema({
+    userId : {
+        type : mongoose.Schema.Types.ObjectId,
+        ref : 'User',
+        required : true
+    },
+    balance : {
+        type : Number,
+        required : true
+    }
+})
 
-module.exports = User;
+
+const User = mongoose.model('User',userSchema);
+const Account = mongoose.model('Account',accountSchema);
+
+module.exports = {
+    User, Account
+};

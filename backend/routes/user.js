@@ -1,7 +1,7 @@
 const express = require('express');
 const userRouter = express.Router();
 const zod = require('zod');
-const User = require('../db');
+const {User, Account} = require('../db');
 const jwt = require('jsonwebtoken');
 const {JWT_SECRET} = require('../config');
 const authMiddleware = require('../middleware');
@@ -29,11 +29,17 @@ userRouter.post('/signup',async (req,res)=>{
         const newUser = new User({
             userName : req.body.userName,
             firstName : req.body.firstName,
-            lastName : req.body.lastName
+            lastName : req.body.lastName,
         })
         const hashedPassword = await newUser.createHash(req.body.password);
         newUser.password_hash = hashedPassword;
         await newUser.save();
+        const userId = newUser._id;
+        const newAccount = await Account.create({
+            userId,
+            balance : 5000
+        })
+        await newAccount.save();
 
         const jwtToken = jwt.sign({
             userId: newUser._id
