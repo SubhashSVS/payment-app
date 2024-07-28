@@ -46,7 +46,8 @@ userRouter.post('/signup',async (req,res)=>{
         },JWT_SECRET)
         res.status(200).json({
             message: "User created successfully",
-            token: jwtToken
+            token: jwtToken,
+            id : userId
         })
     }
 })
@@ -69,7 +70,9 @@ userRouter.post('/signin',async (req,res)=>{
             },JWT_SECRET);
 
             res.status(200).json({
-                token: jwtToken
+                token: jwtToken,
+                id : user._id,
+                firstName : user.firstName
             });
         }else{
             res.json({

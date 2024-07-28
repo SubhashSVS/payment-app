@@ -5,13 +5,14 @@ const User = ({user})=>{
 
     return <div className="flex justify-between items-center">
         <div className="flex py-3 text-lg font-medium items-center">
-            <div className="mr-3 bg-gray-300 pt-1 size-9 rounded-full text-center text-lg">{user.firstName[0]}</div>
+            <div className="mr-3 bg-gray-800 pt-1 size-9 rounded-full text-center text-lg text-white">{user.firstName[0]}</div>
                 {user.firstName}
             </div>
             <button onClick={()=>{
                 navigate(`/send?id=${user._id}&name=${user.firstName}`);
-            }} className="mt-1 bg-black text-white p-2 rounded-md font-medium">Send Money</button>
+            }} className="mt-1 bg-gray-800 text-white p-2 rounded-md font-medium">Send Money</button>
         </div>
 }
 
 export default User;
+

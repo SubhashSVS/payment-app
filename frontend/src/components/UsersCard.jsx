@@ -14,8 +14,8 @@ const UsersCard = ()=>{
             })
     },[filter])  
 
-    return <div className="flex-col px-6">
-        <div className="text-xl font-semibold">
+    return <div className="my-2 flex-col px-6">
+        <div className="text-2xl font-semibold">
             Users
         </div>
         <input onChange={(e)=>{
@@ -23,6 +23,7 @@ const UsersCard = ()=>{
         }} type="text" placeholder="Search users..." className="my-3 border border-slate-400 p-2 rounded-md size-full"/>
         {users.map(user => <User user={user} />)}     
     </div>
+
 }
 
 export default UsersCard;
