@@ -17,7 +17,7 @@ userRouter.post('/signup',async (req,res)=>{
 
     const success = signUpSchema.safeParse(req.body);
     if(!success){
-        res.status(411).json({message: "Email already taken / Incorrect inputs"});
+        res.status(411).json({message: "Invalid inputs"});
     }
     const user = await User.findOne({
         userName : req.body.userName
@@ -75,14 +75,14 @@ userRouter.post('/signin',async (req,res)=>{
                 firstName : user.firstName
             });
         }else{
-            res.json({
+            res.status(400).json({
                 message : "Wrong Password"
             })
         }
     }
     else{
         res.status(411).json({
-            message: "Error while logging in"
+            message: "Invalid Username/Password"
         });
     }
 })
@@ -111,22 +111,35 @@ userRouter.put('/',authMiddleware,async (req,res)=>{
     })
 })
 
-userRouter.get('/bulk',async (req,res)=>{
+userRouter.get('/bulk',authMiddleware,async (req,res)=>{
     const text = req.query.filter;
-    const users = await User.find({
-        $or : [
-            { firstName : {"$regex" : text} },
-            { lastName : {"$regex" : text} }
-        ]
-    })
+    if (!text) {
+        return res.status(400).json({ error: 'Filter query parameter is required' });
+    }
 
+    // const regex = new RegExp(text, 'i');
+    const users = await User.find({
+        $and : [
+            { _id : { $ne : req.userId } },  //exclude logged in user
+            {
+                $or : [
+                    { firstName : {"$regex" : text, "$options" : "i"} },
+                    { lastName : {"$regex" : text, "$options" : "i"} }
+                ]
+            }
+        ]
+        
+    })
+    if (users.length === 0) {
+        return res.status(404).json({ message: 'No users found' });
+    }
     res.json({
         users : users.map(user => ({
             userName : user.userName,
             firstName : user.firstName,
             lastName : user.lastName,
             _id : user._id
-        }))
+        })) 
     })
 })
 

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import Heading from '../components/Heading';
-import { useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import axios from 'axios';
 
 const SendMoney = ()=>{
@@ -8,6 +8,7 @@ const SendMoney = ()=>{
     const id = searchParams.get("id");
     const name = searchParams.get("name");
     const [amount,setAmount] = useState();
+    const navigate = useNavigate();
 
     return <div className='min-h-screen flex items-center justify-center'> 
         <div className='flex-col w-96 p-5 shadow-md
@@ -31,6 +32,7 @@ const SendMoney = ()=>{
                             Authorization : "Bearer " + localStorage.getItem("token")
                         }
                     })
+                    navigate(`/dashboard?id=${id}&name=${name}`,{state : { replace : true }});
                 }} className='size-full bg-green-400 rounded p-3 mt-4'>Initiate Transfer</button></div>
             </div>
         </div>

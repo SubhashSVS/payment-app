@@ -4,12 +4,14 @@ import Heading from '../components/Heading';
 import InputBox from '../components/InputBox';
 import NavigationText from '../components/NavigationText';
 import SubmitButton from '../components/SubmitButton';
+import Error from '../components/Error';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
 const SignIn = ({ title }) => {
   const [email,setEmail] = useState("");
   const [password,setPassword] = useState("");
+  const [error, setError] = useState("");
   const navigate = useNavigate();
 
   return (
@@ -24,14 +26,25 @@ const SignIn = ({ title }) => {
           setPassword(e.target.value);
         }} title={"Password"} placeholder={"********"} />
         <SubmitButton onClick={async ()=>{
-            const response = await axios.post('http://localhost:3000/api/v1/user/signin',{
-              userName : email,
-              password : password
-            })
-            localStorage.setItem('token',response.data.token);
-            navigate(`/dashboard?id=${response.data.id}&name=${response.data.firstName}`);
+            try{
+              const response = await axios.post('http://localhost:3000/api/v1/user/signin',{
+                userName : email,
+                password : password
+              })
+              if(response.status === 200){
+                localStorage.setItem('token',response.data.token);
+                navigate(`/dashboard?id=${response.data.id}&name=${response.data.firstName}`);
+              }
+            }catch(error){
+              if(error.response.status === 400){
+                setError(error.response.data.message);
+              } else if(error.response.status === 411){
+                setError(error.response.data.message);
+              }
+            }
         }} title="Sign In" />
         <NavigationText context={"signin"} route={"Sign Up"}/>
+        <Error errorText={error} />
       </div>
     </div>
   );
