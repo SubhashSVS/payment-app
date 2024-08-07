@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import Heading from '../components/Heading';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import axios from 'axios';
+import api from '../../api';
 
 const SendMoney = ()=>{
     const [searchParams] = useSearchParams();
@@ -24,7 +24,7 @@ const SendMoney = ()=>{
                     setAmount(e.target.value);
                 }} type="text" placeholder='Enter Amount' className='border rounded p-3 mt-1'/>
                 <div><button onClick={()=>{
-                    axios.post('http://localhost:3000/api/v1/account/transfer',{
+                    api.post('/api/v1/account/transfer',{
                         to : id,
                         amount : amount
                     },{

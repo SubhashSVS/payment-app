@@ -4,7 +4,7 @@ import InputBox from '../components/InputBox';
 import SubmitButton from '../components/SubmitButton';
 import Description from '../components/Description';
 import NavigationText from '../components/NavigationText';
-import axios from "axios";
+import api from '../../api';
 import {useNavigate} from 'react-router-dom';
 
 const SignUp = () => {
@@ -33,7 +33,7 @@ const SignUp = () => {
           }} title={"Password"} placeholder={"********"} />
         <SubmitButton
           onClick={async () => {
-            const response = await axios.post("http://localhost:3000/api/v1/user/signup", {
+            const response = await api.post("/api/v1/user/signup", {
               userName: userName,
               firstName: firstName,
               lastName: lastName,

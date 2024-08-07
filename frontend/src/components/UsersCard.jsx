@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import axios from 'axios';
+import api from '../../api';
 import User from './User';
 
 const UsersCard = ()=>{
@@ -8,7 +8,7 @@ const UsersCard = ()=>{
 
     useEffect(()=>{
         if(filter !== "")
-        axios.get(`http://localhost:3000/api/v1/user/bulk?filter=${filter}`,{
+        api.get(`/api/v1/user/bulk?filter=${filter}`,{
             headers : {
                 Authorization : "Bearer" + " " + localStorage.getItem("token")
             }

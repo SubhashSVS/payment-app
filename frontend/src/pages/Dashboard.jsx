@@ -3,7 +3,7 @@ import BalanceCard from '../components/BalanceCard';
 import Header from '../components/Header';
 import UsersCard from '../components/UsersCard';
 import { useEffect, useState } from 'react';
-import axios from 'axios';
+import api from '../../api';
 
 const Dashboard = ()=>{
     const [balance, setBalance] = useState();
@@ -13,7 +13,7 @@ const Dashboard = ()=>{
     const id = searchParams.get("id");
     useEffect(()=>{
         const check = async ()=>{
-            const response = await axios.get('http://localhost:3000/api/v1/account/balance',{
+            const response = await api.get(`/api/v1/account/balance`,{
                 headers : {
                     Authorization : "Bearer"+" "+ localStorage.getItem("token")
                 }
