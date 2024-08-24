@@ -4,7 +4,7 @@ const NavigationText = ({context,route})=>{
             "Already have an account? "
             : "Don't have an account? "
         }
-        <a href={context == "signup" ? "/signin" : "signup"} className="font-medium"><u>{route}</u></a>
+        <a href={context == "signup" ? "/signin" : "/signup"} className="font-medium"><u>{route}</u></a>
     </div>
 }
 export default NavigationText;
