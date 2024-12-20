@@ -23,8 +23,8 @@ const SendMoney = ()=>{
                 <input onChange={(e)=>{
                     setAmount(e.target.value);
                 }} type="text" placeholder='Enter Amount' className='border rounded p-3 mt-1'/>
-                <div><button onClick={()=>{
-                    api.post('/api/v1/account/transfer',{
+                <div><button onClick={async ()=>{
+                    await api.post('/api/v1/account/transfer',{
                         to : id,
                         amount : amount
                     },{

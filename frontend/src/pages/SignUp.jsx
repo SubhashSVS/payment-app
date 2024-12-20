@@ -12,6 +12,7 @@ const SignUp = () => {
   const [lastName, setLastName] = useState("");
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   return (
@@ -21,18 +22,19 @@ const SignUp = () => {
         <Description context={"signup"} />
         <InputBox onInput={(e) => {
             setFirstName(e.target.value);
-          }} title={"First Name"} placeholder={"John"} star={"yes"} />
+          }} title={"First Name"} placeholder={"John"} star={"yes"} type={"text"} />
         <InputBox onInput={(e) => {
             setLastName(e.target.value);
-          }} title={"Last Name"} placeholder={"Doe"} star={"yes"} />
+          }} title={"Last Name"} placeholder={"Doe"} star={"yes"} type={"text"} />
         <InputBox onInput={(e) => {
             setUserName(e.target.value);
-          }} title={"Email"} placeholder={"johndoe@example.com"} star={"yes"} />
+          }} title={"Email"} placeholder={"johndoe@example.com"} star={"yes"} type={"text"} />
         <InputBox onInput={(e) => {
             setPassword(e.target.value);
-          }} title={"Password"} placeholder={"********"} />
+          }} title={"Password"} placeholder={"********"} type={"password"} />
         <SubmitButton
           onClick={async () => {
+            setLoading(true);
             const response = await api.post("/api/v1/user/signup", {
               userName: userName,
               firstName: firstName,
@@ -43,7 +45,15 @@ const SignUp = () => {
             navigate(`/dashboard?id=${response.data.id}&name=${firstName}`);
           }}
           title={"Sign Up"}
+          disabled={loading ? true : false}
         />
+        {
+          loading ? 
+            <div className='flex justify-center pt-3'>
+              <ClipLoader color="#000000" size={30} /> 
+            </div> 
+            : null
+        }
         <NavigationText context="signup" route="Sign In"/>
       </div>
     </div>
