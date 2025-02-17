@@ -58,7 +58,10 @@ const signInSchema = zod.object({
 });
 
 userRouter.post('/signin',async (req,res)=>{
-    
+    const success = signInSchema.safeParse(req.body);
+    if(!success){
+        res.status(411).json({message: "Invalid inputs"});
+    }
     const user = await User.findOne({
         userName : req.body.userName
     })
@@ -94,7 +97,7 @@ const updateSchema = zod.object({
 }).partial();
 
 userRouter.put('/',authMiddleware,async (req,res)=>{
-    const success = zod.safeParse(req.body);
+    const success = updateSchema.safeParse(req.body);
     if(!success){
         res.status(411).json({
             message : "Error while updating information"
